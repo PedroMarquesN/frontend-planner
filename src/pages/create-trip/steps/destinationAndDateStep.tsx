@@ -9,13 +9,13 @@ interface DestinationAndDateStepProps {
   isGuestsInputOpen: boolean;
   openGuestsInput: () => void;
   closeGuestsInput: () => void;
+  setDestination: (destination: string) => void;
+  eventStartAndEndDate: DateRange | undefined;
+  setEventStartAndEndDate: (eventStartAndEndDate: DateRange | undefined) => void;
 }
 
 export function DestinationAndDateStep(props: DestinationAndDateStepProps) {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const [eventStartAndEndDate, setEventStartAndEndDate] = useState<
-    DateRange | undefined
-  >();
 
   const openDatePicker = () => {
     setIsDatePickerOpen(true);
@@ -25,7 +25,7 @@ export function DestinationAndDateStep(props: DestinationAndDateStepProps) {
     setIsDatePickerOpen(false);
   };
 
-  const displayedDate = eventStartAndEndDate && eventStartAndEndDate.from && eventStartAndEndDate.to ? format(eventStartAndEndDate.from, "d' de 'LLL").concat(' até ').concat(format(eventStartAndEndDate.to, "d' de 'LLL")) : null;
+  const displayedDate = props.eventStartAndEndDate && props.eventStartAndEndDate.from && props.eventStartAndEndDate.to ? format(props.eventStartAndEndDate.from, "d' de 'LLL").concat(' até ').concat(format(props.eventStartAndEndDate.to, "d' de 'LLL")) : null;
 
   return (
     <div className="h-16 bg-zinc-900 px-4 rounded-xl flex items-center shadow-shape gap-3">
@@ -34,6 +34,7 @@ export function DestinationAndDateStep(props: DestinationAndDateStepProps) {
         <input
           disabled={props.isGuestsInputOpen}
           type="text"
+          onChange={(event) => props.setDestination(event.target.value)}
           placeholder="Para onde você vai ?"
           className="bg-transparent text-xl placeholder-zinc-400 outline-none flex-1"
         />
@@ -62,8 +63,8 @@ export function DestinationAndDateStep(props: DestinationAndDateStepProps) {
             </div>
             <DayPicker
               mode="range"
-              selected={eventStartAndEndDate}
-              onSelect={setEventStartAndEndDate}
+              selected={props.eventStartAndEndDate}
+              onSelect={props.setEventStartAndEndDate}
               classNames={{
                 selected: `text-black`,
               }}
